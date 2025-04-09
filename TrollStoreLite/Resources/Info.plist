@@ -5,7 +5,7 @@
 	<key>CFBundleExecutable</key>
 	<string>TrollStoreLite</string>
 	<key>CFBundleDisplayName</key>
-	<string>TrollStore Lite</string>
+	<string>巨魔安装器</string>
 	<key>CFBundleIcons</key>
 	<dict>
 		<key>CFBundlePrimaryIcon</key>
