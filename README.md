@@ -1,51 +1,51 @@
-# TrollStore
+# 巨魔商店
 
-TrollStore is a permasigned jailed app that can permanently install any IPA you open in it.
+巨魔商店是一个永久签名的非越狱应用，可以永久安装任何你打开的 IPA 文件。
 
-It works because of an AMFI/CoreTrust bug where iOS does not correctly verify code signatures of binaries in which there are multiple signers.
+它之所以能工作是因为 AMFI/CoreTrust 的一个漏洞，iOS 无法正确验证具有多个签名者的二进制文件的代码签名。
 
-Supported versions: 14.0 beta 2 - 16.6.1, 16.7 RC (20H18), 17.0
+支持版本：14.0 beta 2 - 16.6.1, 16.7 RC (20H18), 17.0
 
-## Installing TrollStore
+## 安装巨魔商店
 
-For installing TrollStore, refer to the guides at [ios.cfw.guide](https://ios.cfw.guide/installing-trollstore)
+关于安装巨魔商店，请参考 [ios.cfw.guide](https://ios.cfw.guide/installing-trollstore) 上的指南
 
-16.7.x (excluding 16.7 RC) and 17.0.1+ will NEVER be supported (unless a third CoreTrust bug is discovered, which is unlikely).
+16.7.x（不包括 16.7 RC）和 17.0.1+ 版本将永远不会被支持（除非发现第三个 CoreTrust 漏洞，这不太可能）。
 
-## Updating TrollStore
+## 更新巨魔商店
 
-When a new TrollStore update is available, a button to install it will appear at the top in the TrollStore settings. After tapping the button, TrollStore will automatically download the update, install it, and respring.
+当有新的巨魔商店更新可用时，在巨魔商店设置顶部会出现一个安装按钮。点击按钮后，巨魔商店将自动下载更新、安装并重启。
 
-Alternatively (if anything goes wrong), you can download the TrollStore.tar file under Releases and open it in TrollStore, TrollStore will install the update and respring.
+或者（如果出现问题），你可以在 Releases 下下载 TrollStore.tar 文件并在巨魔商店中打开，巨魔商店将安装更新并重启。
 
-## Uninstalling an app
+## 卸载应用
 
-Apps installed from TrollStore can only be uninstalled from TrollStore itself, tap an app or swipe it to the left in the 'Apps' tab to delete it.
+从巨魔商店安装的应用只能从巨魔商店本身卸载，在"应用"标签页中点击应用或向左滑动即可删除。
 
-## Persistence Helper
+## 持久化助手
 
-The CoreTrust bug used in TrollStore is only enough to install "System" apps, this is because FrontBoard has an additional security check (it calls libmis) every time before a user app is launched. Unfortunately it is not possible to install new "System" apps that stay through an icon cache reload. Therefore, when iOS reloads the icon cache, all TrollStore installed apps including TrollStore itself will revert back to "User" state and will no longer launch.
+巨魔商店使用的 CoreTrust 漏洞仅足以安装"系统"应用，这是因为 FrontBoard 在每次启动用户应用之前都会进行额外的安全检查（它调用 libmis）。不幸的是，无法安装新的"系统"应用来在图标缓存重新加载后保持。因此，当 iOS 重新加载图标缓存时，所有通过巨魔商店安装的应用（包括巨魔商店本身）将恢复为"用户"状态，并且无法再启动。
 
-The only way to work around this is to install a persistence helper into a system app, this helper can then be used to reregister TrollStore and its installed apps as "System" so that they become launchable again, an option for this is available in TrollStore settings.
+解决这个问题的唯一方法是安装一个持久化助手到系统应用中，这个助手可以用来重新将巨魔商店及其安装的应用注册为"系统"应用，使其可以再次启动，这个选项在巨魔商店设置中可用。
 
-On jailbroken iOS 14 when TrollHelper is used for installation, it is located in /Applications and will persist as a "System" app through icon cache reloads, therefore TrollHelper is used as the persistence helper on iOS 14.
+在越狱的 iOS 14 上，当使用 TrollHelper 进行安装时，它位于 /Applications 中，并且会在图标缓存重新加载后保持为"系统"应用，因此在 iOS 14 上使用 TrollHelper 作为持久化助手。
 
-## URL Scheme
+## URL 方案
 
-As of version 1.3, TrollStore replaces the system URL scheme "apple-magnifier" (this is done so "jailbreak" detections can't detect TrollStore like they could if TrollStore had a unique URL scheme). This URL scheme can be used to install applications right from the browser, or to enable JIT from the app itself (only 2.0.12 and above), the format goes as follows:
+从 1.3 版本开始，巨魔商店替换了系统 URL 方案 "apple-magnifier"（这样做是为了防止"越狱"检测能够像检测具有唯一 URL 方案的巨魔商店那样检测它）。这个 URL 方案可以用来直接从浏览器安装应用，或者从应用本身启用 JIT（仅限 2.0.12 及以上版本），格式如下：
 
-- `apple-magnifier://install?url=<URL_to_IPA>`
+- `apple-magnifier://install?url=<IPA_URL>`
 - `apple-magnifier://enable-jit?bundle-id=<Bundle_ID>`
 
-On devices that don't have TrollStore (1.3+) installed, this will just open the magnifier app.
+在没有安装巨魔商店（1.3+）的设备上，这只会打开放大镜应用。
 
-## Features
+## 功能
 
-The binaries inside an IPA can have arbitrary entitlements, fakesign them with ldid and the entitlements you want (`ldid -S<path/to/entitlements.plist> <path/to/binary>`) and TrollStore will preserve the entitlements when resigning them with the fake root certificate on installation. This gives you a lot of possibilities, some of which are explained below.
+IPA 中的二进制文件可以具有任意权限，使用 ldid 和你想要的权限进行假签名（`ldid -S<path/to/entitlements.plist> <path/to/binary>`），巨魔商店在安装时使用假根证书重新签名时会保留这些权限。这给你提供了很多可能性，下面解释了一些。
 
-### Banned entitlements
+### 被禁止的权限
 
-iOS 15 on A12+ has banned the following three entitlements related to running unsigned code, these are impossible to get without a PPL bypass, apps signed with them will crash on launch.
+iOS 15 在 A12+ 上禁止了以下三个与运行未签名代码相关的权限，没有 PPL 绕过就不可能获得这些权限，使用这些权限签名的应用在启动时会崩溃。
 
 `com.apple.private.cs.debugger`
 
@@ -53,9 +53,9 @@ iOS 15 on A12+ has banned the following three entitlements related to running un
 
 `com.apple.private.skip-library-validation`
 
-### Unsandboxing
+### 解除沙盒限制
 
-Your app can run unsandboxed using one of the following entitlements:
+你的应用可以使用以下任一权限在非沙盒环境中运行：
 
 ```xml
 <key>com.apple.private.security.container-required</key>
@@ -72,55 +72,55 @@ Your app can run unsandboxed using one of the following entitlements:
 <true/>
 ```
 
-The third one is recommended if you still want a sandbox container for your application.
+如果你仍然希望为你的应用保留沙盒容器，推荐使用第三个。
 
-You might also need the platform-application entitlement in order for these to work properly:
+你可能还需要 platform-application 权限才能让这些正常工作：
 
 ```xml
 <key>platform-application</key>
 <true/>
 ```
 
-Please note that the platform-application entitlement causes side effects such as some parts of the sandbox becoming tighter, so you may need additional private entitlements to circumvent that. (For example afterwards you need an exception entitlement for every single IOKit user client class you want to access).
+请注意，platform-application 权限会导致一些副作用，比如沙盒的某些部分变得更严格，所以你可能需要额外的私有权限来绕过这些限制。（例如，之后你需要为每个想要访问的 IOKit 用户客户端类添加异常权限）。
 
-In order for an app with `com.apple.private.security.no-sandbox` and `platform-application` to be able to access it's own data container, you might need the additional entitlement:
+为了让具有 `com.apple.private.security.no-sandbox` 和 `platform-application` 的应用能够访问其自己的数据容器，你可能需要额外的权限：
 
 ```xml
 <key>com.apple.private.security.storage.AppDataContainers</key>
 <true/>
 ```
 
-### Root Helpers
+### Root 助手
 
-When your app is not sandboxed, you can spawn other binaries using posix_spawn, you can also spawn binaries as root with the following entitlement:
+当你的应用不在沙盒中时，你可以使用 posix_spawn 生成其他二进制文件，你也可以使用以下权限以 root 身份生成二进制文件：
 
 ```xml
 <key>com.apple.private.persona-mgmt</key>
 <true/>
 ```
 
-You can also add your own binaries into your app bundle.
+你也可以将自己的二进制文件添加到应用包中。
 
-Afterwards you can use the [spawnRoot function in TSUtil.m](./Shared/TSUtil.m#L79) to spawn the binary as root.
+之后你可以使用 [TSUtil.m 中的 spawnRoot 函数](./Shared/TSUtil.m#L79) 以 root 身份生成二进制文件。
 
-### Things that are not possible using TrollStore
+### 使用巨魔商店无法实现的功能
 
-- Getting proper platformization (`TF_PLATFORM` / `CS_PLATFORMIZED`)
-- Spawning a launch daemon (Would need `CS_PLATFORMIZED`)
-- Injecting a tweak into a system process (Would need `TF_PLATFORM`, a userland PAC bypass and a PMAP trust level bypass)
+- 获得适当的平台化（`TF_PLATFORM` / `CS_PLATFORMIZED`）
+- 生成启动守护进程（需要 `CS_PLATFORMIZED`）
+- 向系统进程注入 tweak（需要 `TF_PLATFORM`、用户空间 PAC 绕过和 PMAP 信任级别绕过）
 
-### Compilation
+### 编译
 
-To compile TrollStore, ensure [theos](https://theos.dev/docs/installation) is installed. Additionaly ensure [brew](https://brew.sh/) is installed and install [libarchive](https://formulae.brew.sh/formula/libarchive) from brew.
+要编译巨魔商店，请确保已安装 [theos](https://theos.dev/docs/installation)。另外确保已安装 [brew](https://brew.sh/)，并从 brew 安装 [libarchive](https://formulae.brew.sh/formula/libarchive)。
 
-## Credits and Further Reading
+## 致谢和进一步阅读
 
-[@alfiecg_dev](https://twitter.com/alfiecg_dev/) - Found the CoreTrust bug that allows TrollStore to work through patchdiffing and worked on automating the bypass.
+[@alfiecg_dev](https://twitter.com/alfiecg_dev/) - 通过补丁差异分析找到了允许巨魔商店工作的 CoreTrust 漏洞，并致力于自动化绕过。
 
-Google Threat Analysis Group - Found the CoreTrust bug as part of an in-the-wild spyware chain and reported it to Apple.
+Google 威胁分析组 - 作为野外间谍软件链的一部分发现了 CoreTrust 漏洞并向 Apple 报告。
 
-[@LinusHenze](https://twitter.com/LinusHenze) - Found the installd bypass used to install TrollStore on iOS 14-15.6.1 via TrollHelperOTA, as well as the original CoreTrust bug used in TrollStore 1.0.
+[@LinusHenze](https://twitter.com/LinusHenze) - 找到了用于通过 TrollHelperOTA 在 iOS 14-15.6.1 上安装巨魔商店的 installd 绕过，以及巨魔商店 1.0 中使用的原始 CoreTrust 漏洞。
 
-[Fugu15 Presentation](https://youtu.be/rPTifU1lG7Q)
+[Fugu15 演示](https://youtu.be/rPTifU1lG7Q)
 
-[Write-Up on the first CoreTrust bug with more information](https://worthdoingbadly.com/coretrust/).
+[关于第一个 CoreTrust 漏洞的详细说明](https://worthdoingbadly.com/coretrust/)
